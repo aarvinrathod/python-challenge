@@ -4,6 +4,7 @@ print(f'___________________________')
 # importing modules
 import os
 import csv
+from typing_extensions import Final
 
 # # Finding and storing file path
 csvpath = os.path.join(os.getcwd(),'pybank','resources','budget_data.csv')
@@ -52,7 +53,25 @@ average_change = round(average_change , 2)  # rouding average change
 
 # print statements
 print(f'Total Months: {total_months}')
-print(f'Total: {total_profit_and_loss}')
-print(f'Average change: {average_change}')
+print(f'Total: ${total_profit_and_loss}')
+print(f'Average change: ${average_change}')
 print(f'Greatest Increase in Profits: {greatest_increase_date} ${greatest_increase}')
 print(f'Greatest Decrease in Profits: {greatest_decrease_date} ${greatest_decrease}')
+
+financial_analysis = os.path.join(os.getcwd(),'pybank','analysis','financial_analysis.txt')
+
+with open (financial_analysis, 'w') as file:
+    
+    file.write(f'Financial Analysis')
+    file.write(f'\n')
+    file.write(f'___________________________')
+    file.write(f'\n')
+    file.write(f'Total Months: {total_months}')
+    file.write(f'\n')
+    file.write(f'Total: ${total_profit_and_loss}')
+    file.write(f'\n')
+    file.write(f'Average change: ${average_change}')
+    file.write(f'\n')
+    file.write(f'Greatest Increase in Profits: {greatest_increase_date} ${greatest_increase}')
+    file.write(f'\n')
+    file.write(f'Greatest Decrease in Profits: {greatest_decrease_date} ${greatest_decrease}')

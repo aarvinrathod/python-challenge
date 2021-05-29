@@ -1,3 +1,6 @@
+print(f'Financial Analysis')
+print(f'___________________________')
+
 # importing modules
 import os
 import csv
@@ -7,53 +10,49 @@ csvpath = os.path.join(os.getcwd(),'pybank','resources','budget_data.csv')
 
 # reading csv file
 with open(csvpath,'r') as csvfile:
-
-    #initialize the writer
-    csvreader = csv.reader(csvfile, delimiter=',')
+    # creating variables
+    total_months = 0
     total_profit_and_loss = 0
-    
-    #print total months
-    for row in csvreader:
-        total_months = len(list(csvreader))
-        print(f'Total Months: {total_months}')
-
-
-with open(csvpath,'r') as csvfile:
-    #initialize the writer
-    csvreader = csv.DictReader(csvfile, delimiter=',')
-    total_profit_and_loss = 0
-
-    for row in csvreader:
-        total_profit_and_loss += int(row['Profit/Losses'])
-
-print(f'Total: {total_profit_and_loss}')
-
-with open(csvpath,'r') as csvfile:
-    #initialize the writer
-    csvreader = csv.reader(csvfile, delimiter=',')
-    next(csvreader)
+    list_dates = []
     list_PandL = []
     list_change_in_PandL = []
     change_in_PandL = 0
     sum_change_in_PandL = 0
     average_change = 0
+    greatest_decrease = 0 
+    greatest_increase = 0
+    greatest_increase_date = ''
+
+    #initialize the writer
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader) #remove header
+    
     for row in csvreader:
-        list_PandL.append(int(row[1]))
+        list_PandL.append(int(row[1])) # making a list of profit and loss as integers
+        list_dates.append(row[0])      # making list of dates as string
+        total_profit_and_loss = sum(list_PandL) # formula to calculate total profit
+        total_months = len(list_PandL)  # formula to calculate total months
+        end = len(list_PandL) # variable to count the end of list
+            
+    for x in range(1,end):  # no change recorded in the first row hence start at 1
+        change_in_PandL = list_PandL[x] - list_PandL[x - 1] #calculating change from the bottom up
+        list_change_in_PandL.append(int(change_in_PandL)) #making a new list for change in P&L
 
-# print(len(list_PandL))
-end = len(list_PandL)
+        sum_change_in_PandL = sum(list_change_in_PandL) # formula for sum of change in P&L
+        average_change = sum_change_in_PandL / len(list_change_in_PandL) # formula for average change
+    
+        greatest_increase = max(list_change_in_PandL) # formula for greatest increase
+        greatest_decrease = min(list_change_in_PandL) # formula for greatest decrease
+        greatest_increase_index = list_change_in_PandL.index(greatest_increase) # finding index for greatest increase
+        greatest_decrease_index = list_change_in_PandL.index(greatest_decrease) # finding index for greatest decrease
+        greatest_increase_date = list_dates[greatest_increase_index + 1]    # code to find date - adding 1 to move down
+        greatest_decrease_date = list_dates[greatest_decrease_index + 1]    # code to find date - adding 1 to move down
 
-for x in range(1,end):
-    change_in_PandL = list_PandL[x] - list_PandL[x - 1]
-    list_change_in_PandL.append(int(change_in_PandL))
+average_change = round(average_change , 2)  # rouding average change
 
-# print(change_in_PandL)
-# print(list_change_in_PandL)
-
-sum_change_in_PandL = sum(list_change_in_PandL)
-
-# print(sum_change_in_PandL)
-
-average_change = sum_change_in_PandL / len(list_change_in_PandL)
-
+# print statements
+print(f'Total Months: {total_months}')
+print(f'Total: {total_profit_and_loss}')
 print(f'Average change: {average_change}')
+print(f'Greatest Increase in Profits: {greatest_increase_date} ${greatest_increase}')
+print(f'Greatest Decrease in Profits: {greatest_decrease_date} ${greatest_decrease}')
